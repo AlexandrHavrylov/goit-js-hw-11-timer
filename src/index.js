@@ -3,21 +3,44 @@
  */
 
 class CountdownTimer{
- constructor({onTick, targetDate, selector}) {
-this.onTick = onTick
+ constructor({targetDate, selector}) {
+
 this.targetDate = targetDate
 this.selector = selector
   }
+
+ pad(value) {
+  return String(value).padStart(2, "0")
+}
+
   
+#getTimerComponents() {
+  
+let curentTime = new Date();
+let time = this.targetDate - curentTime
+    
+const days =  this.pad(Math.floor(time / (1000 * 60 * 60 * 24)));
+const hours =  this.pad(Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
+const mins =  this.pad(Math.floor((time % (1000 * 60 * 60)) / (1000 * 60)));
+const secs =  this.pad(Math.floor((time % (1000 * 60)) / 1000));    
+return {days, hours, mins, secs}
+};
+
+
+ getMarkUp() {
+  
+  let components = this.#getTimerComponents()
+  const curentTimer = document.querySelector(`${this.selector}`)
+  curentTimer.querySelector(' [data-value="days"]').textContent = components.days;
+  curentTimer.querySelector(' [data-value="hours"]').textContent = components.hours;
+  curentTimer.querySelector(' [data-value="mins"]').textContent = components.mins;
+  curentTimer.querySelector(' [data-value="secs"]').textContent = components.secs;
+}
+
+
 changeTime() {
-  
 setInterval(() => {
-const curentTime = new Date();
-const time = this.targetDate - curentTime
-const timerComponents = getTimerComponents(time)
-const markUp = getMarkUp(`${this.selector}`)
-  
-this.onTick(timerComponents, markUp)
+  this.getMarkUp()
  },1000) 
 }
  
@@ -26,17 +49,19 @@ this.onTick(timerComponents, markUp)
 const timer = new CountdownTimer({
   selector: '#timer-1',
   targetDate : new Date('Jul 07, 2021'),
-  onTick: updateTimerField
+
 });
 
+timer.getMarkUp()
 timer.changeTime()
 
 const timer2 = new CountdownTimer({
   selector: '#timer-2',
-  targetDate : new Date('Jul 07, 2022, 15:30'),
-  onTick: updateTimerField
+  targetDate : new Date('Jul 07, 2022, 15:48'),
+ 
 });
 
+timer2.getMarkUp()
 timer2.changeTime()
 
 
@@ -45,41 +70,11 @@ timer2.changeTime()
 
 
 
-function pad(value) {
-  return String(value).padStart(2, "0")
-}
-
-function getMarkUp(id) {
-  
-  const curentTimer = document.querySelector(`${id}`)
-
-  const days =  curentTimer.querySelector(' [data-value="days"]')
-  const hours =  curentTimer.querySelector(' [data-value="hours"]')
-  const mins =  curentTimer.querySelector(' [data-value="mins"]')
-  const secs = curentTimer.querySelector(' [data-value="secs"]')
-  
-  return refs = {
-    days,
-    hours,
-    mins,
-    secs
-  }
-}
 
 
 
-function getTimerComponents(time) {
-const days =  pad(Math.floor(time / (1000 * 60 * 60 * 24)));
-const hours =  pad(Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
-const mins = pad( Math.floor((time % (1000 * 60 * 60)) / (1000 * 60)));
-const secs =  pad(Math.floor((time % (1000 * 60)) / 1000));    
-    
-return {days, hours, mins, secs}
-};
 
-function updateTimerField({ days, hours, mins, secs }) {
-  refs.days.textContent = `${ days }`
-  refs.hours.textContent = `${ hours }`
-  refs.mins.textContent = `${mins}`
-  refs.secs.textContent = `${secs}`  
-}
+
+
+
+
