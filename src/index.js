@@ -1,3 +1,6 @@
+/* Добавил немного разметки , 
+хотел провить будет ли работать c 2мя таймерами 
+ */
 
 class CountdownTimer{
  constructor({onTick, targetDate, selector}) {
