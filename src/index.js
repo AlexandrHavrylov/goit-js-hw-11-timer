@@ -12,8 +12,7 @@ this.selector = selector
  pad(value) {
   return String(value).padStart(2, "0")
 }
-
-  
+ 
 #getTimerComponents() {
   
 let curentTime = new Date();
